@@ -1,0 +1,37 @@
+<html>
+<head>
+	<title>Project 5 SPA Page</title>
+	<script
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    crossorigin="anonymous"></script>
+</head>
+<body>
+
+<button onclick="fetch('students', ['name'])">Students</button>
+<button onclick="fetch('sections', ['name'])">Sections</button>
+<button onclick="fetch('courses', ['name'])">Courses</button>
+
+
+<div id="list">
+</div>
+
+<script>
+var fetch = function(which, fields) {
+    $("#list").empty();
+    $.get("http://localhost:3000/" + which + ".json", true)
+    .done(function(json) {
+        for (item in json) {
+            lis = "<li>";
+            for (field in fields) {
+                lis += json[item][fields[field]] + " ";
+            }
+            lis += "</li>";
+            $("#list").append(lis);
+        }
+    })
+    .fail(function(json){ console.log("fail"); })
+};
+</script>
+
+</body>
+</html>
