@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>P24</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<!-- 
+    <%= text_field_tag :search, params[:search], placeholder: "Search student or section" %>
+    <%= form_tag(enrollments_path, :method => "get", id: "search-form") do %>
+    <%= submit_tag "Search", :name => nil %>
+<% end %> -->
+  </head>
+ <nav class="navbar navbar-light bg-info">
+  <a class="navbar-brand" href="/">Super-Banner</a>
+  <p class="navbar-text pull-right">
+<% if user_signed_in? %>
+  | <%= link_to 'Enrollments', enrollments_path, :class => 'navbar-link'  %> |  
+  <%= link_to 'Courses', courses_path, :class => 'navbar-link'  %> |  
+  <%= link_to 'Sections', sections_path, :class => 'navbar-link'  %> |  
+  <%= link_to 'Students', students_path, :class => 'navbar-link'  %> |     
+  
+  
+  Logged in as <strong><%= current_user.email %></strong>.
+  <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+  <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+<% else %>
+  <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+  <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+<% end %>
+</p>
+</nav>
+
+  <body>
+    <% if notice %>
+      <p class="alert alert-success"><%= notice %></p>
+        <% end %>
+    <% if alert %>
+      <p class="alert alert-danger"><%= alert %></p>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>
