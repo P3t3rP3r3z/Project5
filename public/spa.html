@@ -1,15 +1,17 @@
-<html>
+<html lang="en">
 <head>
 	<title>Project 5 SPA Page</title>
 	<script
     src="https://code.jquery.com/jquery-3.3.1.js"
     crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
 </head>
 <body>
 
-<button onclick="fetch('students', ['name'])">Students</button>
-<button onclick="fetch('sections', ['name'])">Sections</button>
-<button onclick="fetch('courses', ['name'])">Courses</button>
+<button onclick="fetch('students', ['name' , 'student_email' , 'student_id'])">Students</button>
+<button onclick="fetch('sections', ['section_id' , 'semester'])">Sections</button>
+<button onclick="fetch('courses', ['course_id' , 'course_name' , 'department' , 'credit_hours'])">Courses</button>
+<button onclick="fetch('enrollments', [])">Enrollments</button>
 
 
 <div id="list">
