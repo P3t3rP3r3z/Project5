@@ -9,31 +9,129 @@
 <body>
 
 <button onclick="fetch('students', ['name' , 'student_email' , 'student_id'])">Students</button>
-<button onclick="fetch('sections', ['section_id' , 'semester'])">Sections</button>
+ <button id = "sections">Sections</button>
+<!--<button onclick="jstOne('courses', '2')">Sections</button>-->
 <button onclick="fetch('courses', ['course_id' , 'course_name' , 'department' , 'credit_hours'])">Courses</button>
-<button onclick="fetch('enrollments', [])">Enrollments</button>
+<button id="enrollments">Enrollments</button>
 
 
 <div id="list">
 </div>
 
 <script>
-var fetch = function(which, fields) {
+ $(document).ready(function(){
+    function getData(path){
+        var result = null;
+        $.get({
+        url: "http://localhost:3000/" + path + ".json",
+    //dataType:"json",
+        async : false,
+        success: function(data) {result = data; console.log('test 10 '+data) }
+
+     }); 
+        console.log('AAAA'+ result);
+return result;
+}
+
+    $("#sections").on('click', function()  {
+        function displayCourseName(data) {
+        	//console.log('test 12' +data)
+           var course = getData("courses/" + data.course_id);
+
+           return course.course_name;
+
+    }
+    fetch('sections', ['semester', 'section_id', 'room_number', displayCourseName ]);
+  });
+
+    $("#enrollments").on('click', function()  {
+        function displaySectID(data) {
+
+           var sect = getData("sections/" + data.section_id);
+           console.log('test8 ' +sect.section_id)
+           return sect.section_id;
+
+
+           // var stdnt = getData("students/" + data);
+           // console.log('test 11' + stdnt)
+
+          // return sect.section_id;
+
+    }
+    fetch('enrollments', [ displaySectID ]);
+  });
+
+});
+
+
+function getStudent(path, id){
+        var result = null;
+        $.get({
+        url: "http://localhost:3000/" + path + ".json",
+        dataType:"json",
+        async : false,
+        success: function(data) {result = data; console.log('test 10 '+data) }
+
+     }); 
+        console.log(result);
+        for(thing2 in result) {
+        	if (result[thing2].id==id){
+	var thing3 = result[thing2].name;
+	console.log('test14 '+ thing3);
+}
+        }
+return thing3;
+}
+
+function getSection(path, id){
+        var result = null;
+        $.get({
+        url: "http://localhost:3000/" + path + ".json",
+        dataType:"json",
+        async : false,
+        success: function(data) {result = data; console.log('test 10 '+data) }
+
+     }); 
+        console.log(result);
+        for(thing2 in result) {
+        	if (result[thing2].id==id){
+	var thing3 = result[thing2].section_id;
+	console.log('test14 '+ thing3);
+}
+        }
+return thing3;
+}
+
+
+ var fetch = function(which, fields) {
     $("#list").empty();
+    console.log('test13'  +fields);
     $.get("http://localhost:3000/" + which + ".json", true)
     .done(function(json) {
         for (item in json) {
-            lis = "<li>";
-            for (field in fields) {
-                lis += json[item][fields[field]] + " ";
-            }
+        lis = "<li>";
+            for( index in fields){
+            	if(which === 'enrollments'){
+            		var x = getStudent('students', json[item].student_id)
+            		lis += x;
+            		var y = getSection('sections', json[item].section_id)
+            		//lis +=y
+            	}
+            var field = fields[index];
+            if($.isFunction(field)){
+            lis += field(json[item])+ " ";}
+            else {
+            lis += json[item][field]+ " ";
+        }
+            
+           }
             lis += "</li>";
             $("#list").append(lis);
         }
     })
     .fail(function(json){ console.log("fail"); })
 };
-</script>
 
+</script>
 </body>
 </html>
